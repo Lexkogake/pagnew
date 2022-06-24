@@ -2,7 +2,7 @@
   "name": "projetov1",
   "private": true,
   "version": "0.0.0",
-  "homepage": "./",
+  "homepage": "./dist",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
