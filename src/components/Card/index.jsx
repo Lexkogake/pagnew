@@ -1,7 +1,12 @@
 import { Avatar, Box, Typography } from '@mui/material';
-import { Botao, CardResponsivo } from './styled';
+import { CardResponsivo } from './styled';
+import { Botao } from '../Botao/styled';
+import ModalPagamento from '../Modal';
+import { useState } from 'react';
 
 function UserCard({ dados }) {
+  const [chamarModal, setChamarModal] = useState(false);
+
   return (
     <CardResponsivo
       sx={{
@@ -33,8 +38,12 @@ function UserCard({ dados }) {
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <Botao variant="contained" size="small">
-          Pagar
+        <Botao
+          onClick={() => setChamarModal(true)}
+          variant="contained"
+          size="small"
+        >
+          {chamarModal ? <ModalPagamento /> : 'Pagar'}
         </Botao>
       </Box>
     </CardResponsivo>
