@@ -1,11 +1,15 @@
 import { Avatar, Box, Typography } from '@mui/material';
-import { CardResponsivo } from './styled';
+import { memo, useState } from 'react';
+
 import { Botao } from '../Botao/styled';
 import ModalPagamento from '../Modal';
-import { useState } from 'react';
+import { CardResponsivo } from './styled';
 
 function UserCard({ dados }) {
   const [chamarModal, setChamarModal] = useState(false);
+  const clicks = () => {
+    setChamarModal(!chamarModal);
+  };
 
   return (
     <CardResponsivo
@@ -37,17 +41,14 @@ function UserCard({ dados }) {
           id:{dados.id} - Username: {dados.username}
         </Typography>
       </Box>
+
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <Botao
-          onClick={() => setChamarModal(true)}
-          variant="contained"
-          size="small"
-        >
-          {chamarModal ? <ModalPagamento /> : 'Pagar'}
+        <Botao onClick={clicks} variant="contained" size="small">
+          Pagar
         </Botao>
+        {chamarModal ? <ModalPagamento close={clicks} dados={dados} /> : ''}
       </Box>
     </CardResponsivo>
   );
 }
-
-export default UserCard;
+export default memo(UserCard);

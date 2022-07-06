@@ -1,13 +1,28 @@
 import { CircularProgress, Container } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import Api from '../api';
 import UserCard from '../components/Card';
 import { CardUtil } from './styled';
 
 function PageUsers() {
-  const { data, carregando, error } = Api(
-    'https://www.mocky.io/v2/5d531c4f2e0000620081ddce'
-  );
+  const [data, setData] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [error, setError] = useState(null);
+
+  //usando outro metodo para praticar, verificar mais sobre...
+  useEffect(() => {
+    Api.get()
+      .then(({ data }) => {
+        setData(data);
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setCarregando(false);
+      });
+  }, []);
 
   function falha(error) {
     if (error) {
@@ -24,8 +39,8 @@ function PageUsers() {
           <CircularProgress size={24} thickness={5} />
         </CardUtil>
       )}
-      {data.map((resp, index) => {
-        return <UserCard key={index} dados={resp} />;
+      {data.map(resp => {
+        return <UserCard key={resp.id} dados={resp} />;
       })}
     </Container>
   );
