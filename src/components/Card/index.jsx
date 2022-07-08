@@ -46,7 +46,7 @@ function UserCard({ dados }) {
         <Botao onClick={clicks} variant="contained" size="small">
           Pagar
         </Botao>
-        {chamarModal ? <ModalPagamento close={clicks} dados={dados} /> : ''}
+        {chamarModal && <ModalPagamento close={clicks} dados={dados} />}
       </Box>
     </CardResponsivo>
   );

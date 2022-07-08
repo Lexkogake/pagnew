@@ -40,7 +40,7 @@ function PageUsers() {
         </CardUtil>
       )}
       {data.map(resp => {
-        return <UserCard key={resp.id} dados={resp} />;
+        return <UserCard key={String(resp.id)} dados={resp} />;
       })}
     </Container>
   );

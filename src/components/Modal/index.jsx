@@ -1,15 +1,18 @@
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Card,
   CardContent,
   CardHeader,
+  CircularProgress,
+  IconButton,
   InputAdornment,
   MenuItem,
   Modal,
   Select,
   TextField
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Botao } from '../Botao/styled';
 import ModalInformativo from './ModalInformativo';
@@ -20,10 +23,16 @@ function ModalPagamento({ dados, close }) {
   const [chamarModalInfo, setChamarModalInfo] = useState(false);
   const [closeModalPagamento, setCloseModalPagamento] = useState(true);
   const [envioDosDados, setEnvioDosDados] = useState(false);
+  const [load, setLoad] = useState(false);
 
-  const clickInfo = () => {
-    setChamarModalInfo(!chamarModalInfo);
-    setCloseModalPagamento(false);
+  const botaoPagar = () => {
+    if (escolha == '1111111111111111') {
+      efetuarPagamento();
+    } else {
+      setChamarModalInfo(!chamarModalInfo);
+      setEnvioDosDados(false);
+      setCloseModalPagamento(true);
+    }
   };
 
   let cards = [
@@ -41,12 +50,14 @@ function ModalPagamento({ dados, close }) {
     }
   ];
 
-  const selecionado = evento => {
-    setEscolha(evento.target.value);
+  const selectSelecionado = evento => {
+    const cartaoSelecionado = evento.target.value;
+    setEscolha(cartaoSelecionado);
   };
 
-  //praticando chamada com fetch
-  useEffect(() => {
+  const efetuarPagamento = () => {
+    setLoad(true);
+
     const option = {
       method: 'POST',
       header: {
@@ -59,8 +70,12 @@ function ModalPagamento({ dados, close }) {
       option
     )
       .then(retorno => retorno.json())
-      .then(resultado => setEnvioDosDados(resultado.success));
-  }, []);
+      .then(resultado => {
+        setEnvioDosDados(resultado.success);
+        setChamarModalInfo(!chamarModalInfo);
+        setCloseModalPagamento(false);
+      });
+  };
 
   const moeda = evento => {
     let valor = evento.target.value;
@@ -74,7 +89,7 @@ function ModalPagamento({ dados, close }) {
   return (
     <>
       {chamarModalInfo ? (
-        <ModalInformativo closeInfo={clickInfo} valido={envioDosDados} />
+        <ModalInformativo closeInfo={botaoPagar} valido={envioDosDados} />
       ) : (
         <Modal open={closeModalPagamento} onClose={close}>
           <Card
@@ -95,6 +110,11 @@ function ModalPagamento({ dados, close }) {
                 backgroundColor: '#474a6e',
                 color: '#fff'
               }}
+              action={
+                <IconButton sx={{ color: '#fff' }} onClick={close}>
+                  <CloseIcon />
+                </IconButton>
+              }
             />
 
             <CardContent
@@ -127,7 +147,7 @@ function ModalPagamento({ dados, close }) {
                   sx={{ width: '100%' }}
                   displayEmpty
                   value={escolha}
-                  onChange={selecionado}
+                  onChange={selectSelecionado}
                   size="small"
                   defaultValue=""
                 >
@@ -150,10 +170,10 @@ function ModalPagamento({ dados, close }) {
                 variant="contained"
                 size="small"
                 sx={{ width: '80px', mt: '16px', marginX: 'auto' }}
-                onClick={clickInfo}
+                onClick={botaoPagar}
                 disabled={valor < 1 || escolha === ''}
               >
-                Pagar
+                {load ? <CircularProgress size={22} thickness={5} /> : 'Pagar'}
               </Botao>
             </CardContent>
           </Card>
