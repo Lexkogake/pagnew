@@ -98,8 +98,7 @@ function ModalPagamento({ dados, close }) {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              minWidth: '340px',
-              width: '40%',
+              width: { xs: '95%', sm: '600px' },
               boxShadow: '0 0 12px 0 rgba(0,0,0,0.4)'
             }}
           >
@@ -116,7 +115,6 @@ function ModalPagamento({ dados, close }) {
                 </IconButton>
               }
             />
-
             <CardContent
               sx={{
                 display: 'flex',

@@ -13,6 +13,7 @@ function UserCard({ dados }) {
 
   return (
     <CardResponsivo
+      component="card"
       sx={{
         display: 'flex',
         alignItems: 'center',
